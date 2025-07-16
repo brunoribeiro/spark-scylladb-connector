@@ -72,6 +72,7 @@ case class TupleType(componentTypes: TupleFieldDef*)
       override def targetTypeTag = TupleValue.TypeTag
 
       override def convertPF = {
+        case null => newInstance(componentConverters)()
         case value if valuesSeqConverter.exists(_.convertPF.isDefinedAt(value)) =>
           val values = valuesSeqConverter.get.convert(value).toSeq()
           newInstance(componentConverters)(values: _*)
